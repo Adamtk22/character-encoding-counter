@@ -24,9 +24,9 @@ class MainWindow (QtWidgets.QMainWindow):
 
     def open_inputfile (self):
         """open file as text and produce output"""
-        #inputselect_dialog = InputSelectDialog()
-        #inputselect_dialog.show()
-        self.active_file, _ = QtWidgets.QFileDialog.getOpenFileName(caption='Open text file')
+        self.inputselect_dialog = InputSelectDialog()
+        self.inputselect_dialog.exec_()
+        self.active_file = self.inputselect_dialog.selected_filename
         if self.active_file:
             self.inputdisplay_window.update_display(self.active_file)
             self.ui.inputview_button.setEnabled(True)
@@ -45,7 +45,7 @@ class MainWindow (QtWidgets.QMainWindow):
         """show input display window"""
         self.inputdisplay_window.show()
 
-        
+
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
 window.show()

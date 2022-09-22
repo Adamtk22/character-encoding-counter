@@ -37,8 +37,6 @@ class Ui_InputSelectDialog(object):
         self.encoding_combobox.setObjectName("encoding_combobox")
 
         self.retranslateUi(InputSelectDialog)
-        self.buttonBox.accepted.connect(InputSelectDialog.open) # type: ignore
-        self.buttonBox.rejected.connect(InputSelectDialog.reject) # type: ignore
         QtCore.QMetaObject.connectSlotsByName(InputSelectDialog)
 
     def retranslateUi(self, InputSelectDialog):
