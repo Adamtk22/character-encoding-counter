@@ -1,9 +1,11 @@
 from collections import Counter
 
-def count_char (inputfile):
+from chardet.universaldetector import UniversalDetector
+
+def count_char (inputfile, codec):
     """read file and return a list of tuples in (char, count) format"""
     char_count = Counter()
-    with open(inputfile, encoding='utf-8') as file:
+    with open(inputfile, encoding=codec) as file:
         newline = file.readline()
         while newline:
             for char in newline:
@@ -11,4 +13,12 @@ def count_char (inputfile):
             newline = file.readline()
 
     return sorted(char_count.items(), key=lambda x : x[1], reverse=True)
-    
+
+def detect_encoding (inputfile):
+    detector = UniversalDetector()
+    for line in open(inputfile, 'rb'):
+        detector.feed(line)
+        if detector.done:
+            break
+    detector.close()
+    return detector.result['encoding']

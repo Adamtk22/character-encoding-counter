@@ -1,6 +1,5 @@
 import sys
 
-#from PySide2.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog
 from PySide2 import QtCore, QtGui, QtWidgets
 
 from countunicode import count_char
@@ -21,18 +20,20 @@ class MainWindow (QtWidgets.QMainWindow):
         
         self.ui.inputfile_button.released.connect(self.open_inputfile)
         self.ui.inputview_button.released.connect(self.open_inputdisplay)
-
+    
     def open_inputfile (self):
-        """open file as text and produce output"""
+        """open text file and produce output"""
         self.inputselect_dialog = InputSelectDialog()
         self.inputselect_dialog.exec_()
         self.active_file = self.inputselect_dialog.selected_filename
-        if self.active_file:
+        self.active_encoding = self.inputselect_dialog.selected_encoding
+        if self.active_file and self.active_encoding:
             self.inputdisplay_window.update_display(self.active_file)
             self.ui.inputview_button.setEnabled(True)
             self.ui.filename_display.setText(self.active_file)
             self.ui.output_display.clear()
-            char_count = count_char(self.active_file)
+            self.ui.output_display.append(f'Encoding: {self.active_encoding}')
+            char_count = count_char(self.active_file, self.active_encoding)
             if char_count:
                 self.ui.output_display.append('Character occurences')
                 total_char = 0
@@ -40,7 +41,7 @@ class MainWindow (QtWidgets.QMainWindow):
                     self.ui.output_display.append(f'{key} : {num}')
                     total_char += num
                 self.ui.output_display.append(f'Total number of characters: {total_char}')
-
+    
     def open_inputdisplay (self):
         """show input display window"""
         self.inputdisplay_window.show()
