@@ -11,6 +11,8 @@ class InputSelectDialog (QtWidgets.QDialog):
         #Hide label when no file is selected
         self.ui.filename_display.setText('')
         
+        self.ui.browsefiles_button.released.connect(self.get_filename)
+        
         available_encoding = [
             'utf-8',
             'utf-16',
@@ -21,8 +23,6 @@ class InputSelectDialog (QtWidgets.QDialog):
             'use chardet',
         ]
         self.ui.encoding_combobox.addItems(available_encoding)
-        
-        self.ui.browsefiles_button.released.connect(self.get_filename)
         
         self.ui.buttonBox.accepted.connect(self.send_input)
         self.ui.buttonBox.rejected.connect(self.close_dialog)
@@ -37,7 +37,6 @@ class InputSelectDialog (QtWidgets.QDialog):
         #use a dictionary in __init__ instead if more special cases are needed
         if self.selected_encoding == 'use chardet':
             self.selected_encoding = detect_encoding(self.selected_filename)
-        
         self.accept()
     
     def close_dialog (self):

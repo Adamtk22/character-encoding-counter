@@ -1,4 +1,5 @@
 import sys
+from collections import Counter
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
@@ -28,13 +29,17 @@ class MainWindow (QtWidgets.QMainWindow):
         self.active_file = self.inputselect_dialog.selected_filename
         self.active_encoding = self.inputselect_dialog.selected_encoding
         if self.active_file and self.active_encoding:
-            self.inputdisplay_window.update_display(self.active_file)
-            self.ui.inputview_button.setEnabled(True)
             self.ui.filename_display.setText(self.active_file)
             self.ui.output_display.clear()
+            self.inputdisplay_window.ui.input_display.clear()
             self.ui.output_display.append(f'Encoding: {self.active_encoding}')
-            char_count = count_char(self.active_file, self.active_encoding)
+            char_count = Counter()
+            for line in open(self.active_file, 'r', encoding=self.active_encoding):
+                self.inputdisplay_window.ui.input_display.insertPlainText(line)
+                char_count += count_char(line)
+            self.ui.inputview_button.setEnabled(True)
             if char_count:
+                char_count = sorted(char_count.items(), key=lambda x : x[1], reverse=True)
                 self.ui.output_display.append('Character occurences')
                 total_char = 0
                 for key, num in char_count:
