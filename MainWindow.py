@@ -39,13 +39,10 @@ class MainWindow (QtWidgets.QMainWindow):
                 char_count += count_char(line)
             self.ui.inputview_button.setEnabled(True)
             if char_count:
-                char_count = sorted(char_count.items(), key=lambda x : x[1], reverse=True)
                 self.ui.output_display.append('Character occurences')
-                total_char = 0
-                for key, num in char_count:
+                for key, num in char_count.most_common():
                     self.ui.output_display.append(f'{key} : {num}')
-                    total_char += num
-                self.ui.output_display.append(f'Total number of characters: {total_char}')
+                self.ui.output_display.append(f'Total number of characters: {char_count.total()}')
     
     def open_inputdisplay (self):
         """show input display window"""
