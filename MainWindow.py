@@ -17,6 +17,7 @@ class MainWindow (QtWidgets.QMainWindow):
         #Hide filename when no file is opened
         self.ui.filename_display.setText('')
         
+        self.inputselect_dialog = InputSelectDialog()
         self.inputdisplay_window = InputDisplayWindow()
         
         self.ui.inputfile_button.released.connect(self.open_inputfile)
@@ -27,7 +28,7 @@ class MainWindow (QtWidgets.QMainWindow):
     
     def open_inputfile (self):
         """open text file and produce output"""
-        self.inputselect_dialog = InputSelectDialog()
+        #self.inputselect_dialog = InputSelectDialog()
         self.inputselect_dialog.exec_()
         self.active_file = self.inputselect_dialog.selected_filename
         self.active_encoding = self.inputselect_dialog.selected_encoding
