@@ -22,6 +22,9 @@ class MainWindow (QtWidgets.QMainWindow):
         self.ui.inputfile_button.released.connect(self.open_inputfile)
         self.ui.inputview_button.released.connect(self.open_inputdisplay)
     
+    def closeEvent (self, event):
+        self.inputdisplay_window.close()
+    
     def open_inputfile (self):
         """open text file and produce output"""
         self.inputselect_dialog = InputSelectDialog()
