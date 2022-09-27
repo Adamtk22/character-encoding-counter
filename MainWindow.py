@@ -3,7 +3,7 @@ from collections import Counter
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
-from countunicode import count_char
+from countunicode import CharCountTools
 from MainWindowLayout import Ui_MainWindow
 from InputView import InputDisplayWindow
 from InputSelect import InputSelectDialog
@@ -22,13 +22,14 @@ class MainWindow (QtWidgets.QMainWindow):
         
         self.ui.inputfile_button.released.connect(self.open_inputfile)
         self.ui.inputview_button.released.connect(self.open_inputdisplay)
+        
+        self.counter_tool = CharCountTools()
     
     def closeEvent (self, event):
         self.inputdisplay_window.close()
     
     def open_inputfile (self):
         """open text file and produce output"""
-        #self.inputselect_dialog = InputSelectDialog()
         self.inputselect_dialog.exec_()
         self.active_file = self.inputselect_dialog.selected_filename
         self.active_encoding = self.inputselect_dialog.selected_encoding
@@ -40,7 +41,7 @@ class MainWindow (QtWidgets.QMainWindow):
             char_count = Counter()
             for line in open(self.active_file, 'r', encoding=self.active_encoding):
                 self.inputdisplay_window.ui.input_display.insertPlainText(line)
-                char_count += count_char(line)
+                char_count += self.counter_tool.count_char(line)
             self.ui.inputview_button.setEnabled(True)
             if char_count:
                 self.ui.output_display.append('Character occurences')

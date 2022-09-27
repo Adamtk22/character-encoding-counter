@@ -1,20 +1,17 @@
 from collections import Counter
 
-from chardet.universaldetector import UniversalDetector
+class CharCountTools (object):
+    def __init__ (self):
+        self.whitespace_labels = {
+            ' ' : '<SPACE>',
+            '\n' : '<NEWLINE>',
+            '\t' : '<TAB>',
+        }
+    
+    def count_char (self, line):
+        """read a string and return a counter of characters in the string"""
+        char_count = Counter()
+        for char in line:
+            char_count[self.whitespace_labels.get(char, char)] += 1
 
-def count_char (line):
-    """read a string and return a counter of characters in the string"""
-    char_count = Counter()
-    for char in line:
-        char_count[char] += 1
-
-    return char_count
-
-def detect_encoding (inputfile):
-    detector = UniversalDetector()
-    for line in open(inputfile, 'rb'):
-        detector.feed(line)
-        if detector.done:
-            break
-    detector.close()
-    return detector.result['encoding']
+        return char_count

@@ -1,7 +1,7 @@
 from PySide2 import QtCore, QtWidgets, QtGui
+from chardet.universaldetector import UniversalDetector
 
 from InputSelectLayout import Ui_InputSelectDialog
-from countunicode import detect_encoding
 
 class InputSelectDialog (QtWidgets.QDialog):
     def __init__ (self):
@@ -36,8 +36,18 @@ class InputSelectDialog (QtWidgets.QDialog):
         self.selected_encoding = self.ui.encoding_combobox.currentText()
         #use a dictionary in __init__ instead if more special cases are needed
         if self.selected_encoding == 'use chardet':
-            self.selected_encoding = detect_encoding(self.selected_filename)
+            self.selected_encoding = self.detect_encoding(self.selected_filename)
         self.accept()
     
     def close_dialog (self):
         self.reject()
+        
+    @staticmethod
+    def detect_encoding (inputfile):
+        detector = UniversalDetector()
+        for line in open(inputfile, 'rb'):
+            detector.feed(line)
+            if detector.done:
+                break
+        detector.close()
+        return detector.result['encoding']
